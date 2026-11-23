@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f5f1" />
+    <meta name="description" content="A simple place to organise coursework, deadlines, and study progress." />
+    <title>Student Task Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=4" />
+    <script src="app.js?v=4" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#dashboard" aria-label="Student Task Manager home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-name">study<span>mate</span></span>
+        </a>
+
+        <div class="nav-label">WORKSPACE</div>
+        <nav class="primary-nav">
+          <button class="nav-item is-active" type="button" data-view="dashboard">
+            <span class="nav-icon" aria-hidden="true">⌂</span><span>Overview</span>
+          </button>
+          <button class="nav-item" type="button" data-view="tasks">
+            <span class="nav-icon" aria-hidden="true">▤</span><span>My tasks</span>
+            <span class="nav-count" id="nav-pending">0</span>
+          </button>
+          <button class="nav-item" type="button" data-view="completed">
+            <span class="nav-icon" aria-hidden="true">✓</span><span>Completed</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-note">
+            <span class="note-spark" aria-hidden="true">✳</span>
+            <p>A little progress<br />goes a long way.</p>
+          </div>
+          <div class="profile-row">
+            <button class="profile-trigger" type="button" data-profile aria-label="Open account details for Obed Avuglah">
+              <span class="profile-avatar" aria-hidden="true">OA</span>
+              <span class="profile-copy"><strong>Obed Avuglah</strong><span>Student</span></span>
+            </button>
+            <button class="profile-menu" type="button" data-profile aria-label="Open account menu">···</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content" id="dashboard">
+        <header class="topbar">
+          <div class="mobile-brand">
+            <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span class="brand-name">study<span>mate</span></span>
+          </div>
+          <div class="topbar-date" id="today-label">TODAY</div>
+          <div class="topbar-actions">
+            <label class="search-box">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Search your tasks" aria-label="Search tasks" />
+              <kbd>/</kbd>
+            </label>
+            <button class="top-avatar" type="button" data-profile aria-label="Open account menu">OA</button>
+          </div>
+        </header>
+
+        <section class="welcome-banner" aria-labelledby="welcome-title">
+          <div class="welcome-copy">
+            <p class="banner-kicker"><span class="kicker-dot"></span> YOUR STUDY SPACE</p>
+            <h1 id="welcome-title">Make room for<br />good work.</h1>
+            <p class="welcome-subtitle">Keep your coursework in one place. You’ve got this.</p>
+          </div>
+          <div class="banner-art" aria-hidden="true">
+            <div class="sun-disc"></div>
+            <div class="paper paper-back"></div>
+            <div class="paper paper-front"><i></i><i></i><i></i><b>✓</b></div>
+            <div class="banner-orbit"></div>
+          </div>
+          <button class="button button-light banner-add" type="button" data-open-task>
+            <span aria-hidden="true">+</span> Add a task
+          </button>
+        </section>
+
+        <section class="stats-grid" aria-label="Task summary">
+          <button class="stat-card stat-total" type="button" data-summary-view="all">
+            <div class="stat-top"><span>Total tasks</span><span class="stat-symbol" aria-hidden="true">▤</span></div>
+            <div class="stat-value" id="total-count">0</div>
+            <div class="stat-foot">Across all your courses</div>
+          </button>
+          <button class="stat-card stat-pending" type="button" data-summary-view="pending">
+            <div class="stat-top"><span>In progress</span><span class="stat-symbol" aria-hidden="true">◷</span></div>
+            <div class="stat-value" id="pending-count">0</div>
+            <div class="stat-foot"><span class="status-dot coral-dot"></span>Still to take care of</div>
+          </button>
+          <button class="stat-card stat-completed" type="button" data-summary-view="completed">
+            <div class="stat-top"><span>Completed</span><span class="stat-symbol" aria-hidden="true">✓</span></div>
+            <div class="stat-value" id="completed-count">0</div>
+            <div class="stat-foot"><span class="status-dot green-dot"></span>Look at you go</div>
+          </button>
+          <button class="stat-card stat-due" type="button" data-summary-view="week">
+            <div class="stat-top"><span>Due this week</span><span class="stat-symbol" aria-hidden="true">▦</span></div>
+            <div class="stat-value" id="week-count">0</div>
+            <div class="stat-foot">Coming up in the next 7 days</div>
+          </button>
+        </section>
+
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">YOUR COURSEWORK</p>
+            <h2 id="list-heading">Let’s get things done</h2>
+          </div>
+          <button class="button button-primary desktop-add" type="button" data-open-task><span aria-hidden="true">+</span> New task</button>
+        </div>
+
+        <div class="content-grid">
+          <section class="task-panel" aria-label="Your tasks">
+            <div class="task-toolbar">
+              <div class="filter-tabs" role="group" aria-label="Filter tasks by status">
+                <button class="filter-tab is-selected" type="button" data-filter="all">All tasks <span id="all-tab-count">0</span></button>
+                <button class="filter-tab" type="button" data-filter="pending">To do</button>
+                <button class="filter-tab" type="button" data-filter="completed">Done</button>
+              </div>
+              <div class="toolbar-selects">
+                <label class="select-wrap"><span class="sr-only">Filter by priority</span>
+                  <select id="priority-filter"><option value="all">All priorities</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select>
+                </label>
+                <label class="select-wrap sort-select"><span class="sr-only">Sort tasks</span>
+                  <select id="sort-select"><option value="due">Due date</option><option value="priority">Priority</option><option value="created">Recently added</option></select>
+                </label>
+              </div>
+            </div>
+            <div class="task-list" id="task-list" aria-live="polite"></div>
+          </section>
+
+          <aside class="right-rail" aria-label="Study progress and upcoming deadlines">
+            <section class="progress-card">
+              <div class="rail-heading"><div><p class="section-kicker">YOUR MOMENTUM</p><h3>Progress</h3></div><span class="progress-spark" aria-hidden="true">✳</span></div>
+              <div class="progress-content">
+                <div class="progress-ring" id="progress-ring" role="img" aria-label="0 percent of tasks completed"><div class="ring-inner"><strong id="progress-percent">0%</strong><span>complete</span></div></div>
+                <div class="progress-copy"><strong id="progress-caption">A fresh start</strong><span id="progress-detail">Every task you finish counts.</span></div>
+              </div>
+              <div class="progress-track"><span id="progress-bar"></span></div>
+              <div class="progress-foot"><span>Tasks completed</span><strong id="progress-fraction">0 / 0</strong></div>
+            </section>
+
+            <section class="upcoming-card">
+              <div class="rail-heading"><div><p class="section-kicker">STAY AHEAD</p><h3>Coming up</h3></div><span class="calendar-mark" aria-hidden="true">▦</span></div>
+              <div class="upcoming-list" id="upcoming-list"></div>
+              <button class="text-action" type="button" data-view="tasks">See all tasks <span aria-hidden="true">→</span></button>
+            </section>
+
+            <div class="quote-strip"><span aria-hidden="true">“</span><p>Small steps every day add up to big things.</p></div>
+          </aside>
+        </div>
+        <footer class="app-footer"><span>STUDYMATE</span><span>One task at a time.</span></footer>
+      </main>
+    </div>
+
+    <dialog class="task-dialog" id="task-dialog" aria-labelledby="dialog-title">
+      <form id="task-form" method="dialog">
+        <div class="dialog-header">
+          <div><p class="section-kicker">MAKE A PLAN</p><h2 id="dialog-title">Add a task</h2></div>
+          <button class="close-button" type="button" data-close-dialog aria-label="Close dialog">×</button>
+        </div>
+        <input id="task-id" type="hidden" />
+        <label class="form-field">Task name<input id="task-title" name="title" type="text" placeholder="e.g. Finish the lab report" maxlength="90" required /></label>
+        <label class="form-field">Course or subject<input id="task-course" name="course" type="text" placeholder="e.g. Web Technologies" maxlength="50" required /></label>
+        <div class="form-row">
+          <label class="form-field">Due date<input id="task-due" name="dueDate" type="date" required /></label>
+          <label class="form-field">Priority<select id="task-priority" name="priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></label>
+        </div>
+        <label class="form-field">Notes <span class="optional-label">OPTIONAL</span><textarea id="task-notes" name="notes" rows="3" maxlength="240" placeholder="Add a detail to help you get started"></textarea></label>
+        <div class="dialog-actions"><button class="button button-quiet" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit" id="save-task-button">Save task <span aria-hidden="true">→</span></button></div>
+      </form>
+    </dialog>
+    <dialog class="task-dialog account-dialog" id="account-dialog" aria-labelledby="account-dialog-title">
+      <div class="dialog-header">
+        <div><p class="section-kicker">STUDYMATE ACCOUNT</p><h2 id="account-dialog-title">Your account</h2></div>
+        <button class="close-button" type="button" data-close-account aria-label="Close account menu">×</button>
+      </div>
+      <div class="account-details">
+        <span class="profile-avatar account-avatar" aria-hidden="true">OA</span>
+        <div class="profile-copy"><strong>Obed Avuglah</strong><span>Student</span></div>
+      </div>
+      <p class="account-note">Your study tasks and progress are saved in this browser.</p>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
