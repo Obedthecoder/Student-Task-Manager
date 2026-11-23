@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=4" />
-    <script src="app.js?v=4" defer></script>
+    <link rel="stylesheet" href="styles.css?v=5" />
+    <script src="app.js?v=5" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -81,6 +81,15 @@
           <button class="button button-light banner-add" type="button" data-open-task>
             <span aria-hidden="true">+</span> Add a task
           </button>
+        </section>
+
+        <section class="deadline-reminder" id="deadline-reminder" aria-live="polite" hidden>
+          <span class="reminder-icon" aria-hidden="true">!</span>
+          <div class="reminder-copy">
+            <h2 id="reminder-title"></h2>
+            <p id="reminder-details"></p>
+          </div>
+          <button class="button button-quiet reminder-action" type="button" data-summary-view="week">Review due tasks <span aria-hidden="true">→</span></button>
         </section>
 
         <section class="stats-grid" aria-label="Task summary">

@@ -50,6 +50,7 @@ let toastTimer;
 
 const taskList = document.querySelector("#task-list");
 const upcomingList = document.querySelector("#upcoming-list");
+const deadlineReminder = document.querySelector("#deadline-reminder");
 const dialog = document.querySelector("#task-dialog");
 const accountDialog = document.querySelector("#account-dialog");
 const taskForm = document.querySelector("#task-form");
@@ -154,6 +155,21 @@ function renderUpcoming() {
   }).join("");
 }
 
+function renderDeadlineReminder() {
+  const dueSoon = tasks
+    .filter((task) => !task.completed && task.dueDate && daysUntil(task.dueDate) >= 0 && daysUntil(task.dueDate) <= 2)
+    .sort((first, second) => first.dueDate.localeCompare(second.dueDate));
+  deadlineReminder.hidden = dueSoon.length === 0;
+  if (!dueSoon.length) return;
+
+  const count = dueSoon.length;
+  document.querySelector("#reminder-title").textContent = `${count} ${count === 1 ? "task is" : "tasks are"} due soon`;
+  const shown = dueSoon.slice(0, 3).map((task) => `${task.title} (${formatDue(task.dueDate)})`);
+  const remaining = count - shown.length;
+  const remainingText = remaining ? `, and ${remaining} more` : "";
+  document.querySelector("#reminder-details").textContent = `${shown.join(" · ")}${remainingText}`;
+}
+
 function renderStats() {
   const completed = tasks.filter((task) => task.completed).length;
   const pending = tasks.length - completed;
@@ -177,6 +193,7 @@ function renderStats() {
 function render() {
   renderStats();
   renderUpcoming();
+  renderDeadlineReminder();
   const visible = getVisibleTasks();
   if (!visible.length) {
     const searching = searchInput.value.trim();
